@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool cmp(const vector<int>& a, const vector<int>& b) {
+    return (a[0] + a[1] == b[0] + b[1]) ? a[0] < b[0] : a[0] + a[1] < b[0] + b[1];
+}
+//solution function
+void solition() {
+    int n, k;
+    cin >> n >> k;
+
+    vector<int> a(n), b(n);
+    for (int& ai : a) cin >> ai;
+    for (int& bi : b) cin >> bi;
+
+    vector<vector<int>> arranh(n);
+    for (int i = 0; i < n; i++) {
+        arranh[i] = {a[i], b[i]};
+    }
+    sort(arranh.begin(), arranh.end(), cmp);
+
+    int mx = 0, sum = 0, i = 0;
+    while (i < n && arranh[i][0] + arranh[i][1] + sum <= k) {
+        sum += arranh[i][0] + arranh[i][1];
+        mx = max(mx, arranh[i][1]);
+        i++;
+    }
+//vector
+    vector<int> mn(n);
+    for (int k = n - 1; k >= 0; k--) {
+        mn[k] = (k == n - 1) ? arranh[k][0] : min(mn[k + 1], arranh[k][0]);
+    }
+
+    int ans = i;
+    if (i < n) {
+        int rem = k - sum;
+        if (mn[i] <= rem || rem + mx >= arranh[i][0] + arranh[i][1]) ans++;
+    }
+
+    cout << ans << endl;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solition();
+    }
+    return 0;
+}
